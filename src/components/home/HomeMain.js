@@ -17,6 +17,9 @@ const HomeMain = () => {
   const { handleSubmit, register, setValue, watch, reset } = useForm();
 
   const getExpenses = async () => {
+    if (!CLIENT_URL) {
+      return null;
+    }
     try {
       const response = await fetch(`${CLIENT_URL}/api/expense/get-expense`);
       const data = await response.json();
@@ -41,6 +44,9 @@ const HomeMain = () => {
       food: parseInt(data?.food),
       alcohol: parseInt(data?.alcohol),
     };
+    if (!CLIENT_URL) {
+      return null;
+    }
     try {
       if (todayExpense) {
         fetch(`${CLIENT_URL}/api/expense/update-expense/${todayExpense?.id}`, {
@@ -87,6 +93,9 @@ const HomeMain = () => {
   };
 
   const removeExpenses = async (id) => {
+    if (!CLIENT_URL) {
+      return null;
+    }
     try {
       fetch(`${CLIENT_URL}/api/expense/remove-expense/${id}`, {
         method: "DELETE",
