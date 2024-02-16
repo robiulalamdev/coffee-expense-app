@@ -16,7 +16,13 @@ export default async function handler(req, res) {
       today.getMonth(),
       today.getDate() + 1
     );
-    const expenses = await prisma.expense.findMany({});
+    const expenses = await prisma.expense.findMany({
+      orderBy: [
+        {
+          id: "desc",
+        },
+      ],
+    });
     const todayData = expenses.find((exp) => {
       const createdAt = new Date(exp.createdAt);
       return createdAt >= todayStart && createdAt < todayEnd;
