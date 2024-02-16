@@ -3,6 +3,9 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
+// const CLIENT_URL = "http://localhost:3000";
+const CLIENT_URL = "https://coffee-expense.vercel.app";
+
 const HomeMain = () => {
   const { handleNumber } = useInputPattern();
   const [expense, setExpense] = useState(null);
@@ -12,9 +15,9 @@ const HomeMain = () => {
 
   const { handleSubmit, register, setValue, watch, reset } = useForm();
 
-  const getExpenses = async (data) => {
+  const getExpenses = async () => {
     try {
-      const response = await fetch("/api/expense/get-expense");
+      const response = await fetch(`${CLIENT_URL}/api/expense/get-expense`);
       const data = await response.json();
       if (data?.success) {
         setTodayExpense(data?.data?.today);
@@ -39,7 +42,7 @@ const HomeMain = () => {
     };
     try {
       if (todayExpense) {
-        fetch(`/api/expense/update-expense/${todayExpense?.id}`, {
+        fetch(`${CLIENT_URL}/api/expense/update-expense/${todayExpense?.id}`, {
           method: "PATCH",
           body: JSON.stringify(newData),
           headers: {
@@ -58,7 +61,7 @@ const HomeMain = () => {
             }
           });
       } else {
-        fetch("/api/expense/add-expense", {
+        fetch(`${CLIENT_URL}/api/expense/add-expense`, {
           method: "POST",
           body: JSON.stringify(newData),
           headers: {
@@ -84,7 +87,7 @@ const HomeMain = () => {
 
   const removeExpenses = async (id) => {
     try {
-      fetch(`/api/expense/remove-expense/${id}`, {
+      fetch(`${CLIENT_URL}/api/expense/remove-expense/${id}`, {
         method: "DELETE",
       })
         .then((res) => res.json())
