@@ -1,11 +1,7 @@
-import { CLIENT_URL } from "@/lib/hooks/constants";
 import useInputPattern from "@/lib/hooks/useInputPattern";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-
-// const CLIENT_URL = "http://localhost:3000";
-// const CLIENT_URL = "https://coffee-expense.vercel.app";
 
 const HomeMain = () => {
   const { handleNumber } = useInputPattern();
@@ -17,11 +13,8 @@ const HomeMain = () => {
   const { handleSubmit, register, setValue, watch, reset } = useForm();
 
   const getExpenses = async () => {
-    if (!CLIENT_URL) {
-      return null;
-    }
     try {
-      const response = await fetch(`${CLIENT_URL}/api/expense/get-expense`);
+      const response = await fetch(`/api/expense/get-expense`);
       const data = await response.json();
       if (data?.success) {
         setTodayExpense(data?.data?.today);
@@ -44,12 +37,9 @@ const HomeMain = () => {
       food: parseInt(data?.food),
       alcohol: parseInt(data?.alcohol),
     };
-    if (!CLIENT_URL) {
-      return null;
-    }
     try {
       if (todayExpense) {
-        fetch(`${CLIENT_URL}/api/expense/update-expense/${todayExpense?.id}`, {
+        fetch(`/api/expense/update-expense/${todayExpense?.id}`, {
           method: "PATCH",
           body: JSON.stringify(newData),
           headers: {
@@ -68,7 +58,7 @@ const HomeMain = () => {
             }
           });
       } else {
-        fetch(`${CLIENT_URL}/api/expense/add-expense`, {
+        fetch(`/api/expense/add-expense`, {
           method: "POST",
           body: JSON.stringify(newData),
           headers: {
@@ -93,11 +83,8 @@ const HomeMain = () => {
   };
 
   const removeExpenses = async (id) => {
-    if (!CLIENT_URL) {
-      return null;
-    }
     try {
-      fetch(`${CLIENT_URL}/api/expense/remove-expense/${id}`, {
+      fetch(`/api/expense/remove-expense/${id}`, {
         method: "DELETE",
       })
         .then((res) => res.json())
